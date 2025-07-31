@@ -100,20 +100,25 @@
 
             if (!diameterInput) return [];
 
-            // Séparation des lignes puis des cellules
+            // Découpage CSV → lignes → cellules, trim sur chaque cellule pour éliminer les espaces d'indentation
             const rows = csvDataRaw.trim().split(/\r?\n/).map(l => l.split(';').map(c => c.trim()));
 
-            // Première ligne = diamètres
-            const diamRow = rows[0];
+            // 1) Identifier la ligne des diamètres : première ligne contenant au moins une valeur numérique
+            const diamLineIdx = rows.findIndex(row => row.some(c => /^\d+(?:[,.]\d+)?$/.test(c)));
+            if (diamLineIdx === -1) return [];
+            const diamRow = rows[diamLineIdx];
+
+            // 2) Trouver la colonne correspondant au diamètre recherché
             const target  = parseFloat(String(diameterInput).replace(',', '.'));
             const colIdx  = diamRow.findIndex(c => parseFloat(c.replace(',', '.')) === target);
             if (colIdx === -1) return [];
 
-            // Parcours des lignes suivantes
+            // 3) Parcourir les lignes de données et collecter si colonne 4 = 1
             const results = [];
-            for (let i = 1; i < rows.length; i++) {
+            for (let i = diamLineIdx + 1; i < rows.length; i++) {
                 const row = rows[i];
-                if (row[3] !== '1') continue;                // colonne 4 = 1
+                if (row[3] !== '1') continue;          // colonne « calcul »
+
                 const code = (row[colIdx] || '').trim();
                 if (!code || code === '0' || code === '#N/A') continue;
 
