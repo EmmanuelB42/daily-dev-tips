@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devis Haute Tension - Sélection Équipements</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 30px;
+            text-align: center;
+            border-bottom: 2px solid #3b82f6;
+        }
+
+        .header h1 {
+            color: #3b82f6;
+            font-size: 2.5em;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 1.1em;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            align-items: flex-end;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #cbd5e1;
+            font-size: 1.1em;
+        }
+
+        input[type="number"] {
+            width: 200px;
+            padding: 15px;
+            border: 2px solid #334155;
+            border-radius: 8px;
+            background: rgba(30, 41, 59, 0.8);
+            color: #e0e0e0;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 15px 20px;
+            background: rgba(30, 41, 59, 0.6);
+            border: 2px solid #334155;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            position: relative;
+        }
+
+        .radio-item:hover {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        .radio-item input[type="radio"] {
+            margin: 0;
+            transform: scale(1.3);
+            accent-color: #3b82f6;
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .radio-item.selected {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: #3b82f6;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .radio-item label {
+            margin: 0;
+            font-weight: 500;
+            cursor: pointer;
+            color: #e0e0e0;
+            pointer-events: none;
+        }
+
+        .core-diameter {
+            margin-top: 20px;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .core-diameter.show {
+            opacity: 1;
+            max-height: 100px;
+        }
+
+        .results {
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(15, 23, 42, 0.7);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .results h3 {
+            color: #3b82f6;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .results-table {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .results-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .results-table th {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: #3b82f6;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1em;
+            border-bottom: 2px solid #3b82f6;
+        }
+
+        .results-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: #e0e0e0;
+            vertical-align: top;
+        }
+
+        .results-table tr:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .results-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .accessoire-cell {
+            font-weight: 600;
+            color: #cbd5e1;
+            min-width: 200px;
+        }
+
+        .designation-cell {
+            color: #94a3b8;
+            min-width: 250px;
+        }
+
+        .reference-cell {
+            font-family: 'Courier New', monospace;
+            color: #3b82f6;
+            min-width: 150px;
+        }
+
+        .code-cell {
+            font-family: 'Courier New', monospace;
+            color: #10b981;
+            min-width: 120px;
+        }
+
+        .category-separator {
+            background: linear-gradient(135deg, #334155 0%, #475569 100%);
+            color: #3b82f6;
+            font-weight: 700;
+            font-size: 1.1em;
+            text-align: center;
+            padding: 15px;
+            border-top: 2px solid #3b82f6;
+            border-bottom: 2px solid #3b82f6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .category-separator:first-child {
+            border-top: none;
+        }
+
+        .no-results {
+            text-align: center;
+            color: #ef4444;
+            font-size: 1.2em;
+            padding: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .radio-group {
+                flex-direction: column;
+            }
+
+            input[type="number"] {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Devis Haute Tension</h1>
+            <p>Sélection d'équipements électriques professionnels</p>
+        </div>
+
+        <div class="form-container">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="diameter">Diamètre du câble (mm)</label>
+                    <input type="number" id="diameter" step="0.01" min="0" placeholder="Ex: 25.02">
+                </div>
+
+                <div class="form-group">
+                    <label>Type de câble</label>
+                    <div class="radio-group">
+                        <div class="radio-item">
+                            <input type="radio" id="accc" name="cableType" value="ACCC">
+                            <label for="accc">ACCC</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="hvcrc" name="cableType" value="HVCRC">
+                            <label for="hvcrc">HVCRC</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="nonHT" name="cableType" value="non HT">
+                            <label for="nonHT">non HT</label>
+                        </div>
+                        <div class="radio-item">
+                            <input type="radio" id="opgw" name="cableType" value="OPGW">
+                            <label for="opgw">OPGW</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="core-diameter" id="coreDiameter">
+                <label for="coreSize">Ø core</label>
+                <input type="number" id="coreSize" step="0.01" min="0" placeholder="Diamètre du cœur">
+            </div>
+
+            <div id="results" class="results" style="display: none;">
+                <h3>Équipements correspondants</h3>
+                <div id="resultsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CSV data - remplacez par vos vraies données
+        const csvDataRaw = `;;;;;;;7;8;9;10
+HT maxi 200°C;Stockbridge;StockBridge avec Armor Rod pour cable HT 200° maxi;1;1;;STOCKBRIDGE;VD7;VD8;VD9;VD10
+HT maxi 200°C;Amortisseur;Amortisseur de vibrations;1;1;;AMORTISSEUR;AM7;AM8;AM9;AM10
+non HT;Connecteur;Connecteur standard;1;1;;CONNECTEUR;CN7;CN8;CN9;CN10`;
+
+        function extractMatchingColumn(csvRaw, diametreRecherche) {
+            const lines = csvRaw.trim().split("\n").map(l => l.split(";"));
+            
+            // Trouver la ligne 2 (index 1) qui contient les diamètres
+            if (lines.length < 2) return [];
+            const diamLine = lines[1]; // Ligne 2 (index 1)
+            
+            // Convertir le diamètre recherché en nombre
+            const target = parseFloat(diametreRecherche.toString().replace(",", "."));
+            
+            // Trouver l'index de la colonne correspondant au diamètre
+            let diamIndex = -1;
+            for (let i = 0; i < diamLine.length; i++) {
+                const cellValue = diamLine[i]?.trim();
+                if (cellValue && !isNaN(parseFloat(cellValue.replace(",", ".")))) {
+                    if (parseFloat(cellValue.replace(",", ".")) === target) {
+                        diamIndex = i;
+                        break;
+                    }
+                }
+            }
+            
+            if (diamIndex === -1) return [];
+
+            // Traiter toutes les lignes de données (à partir de la ligne 3, index 2)
+            const dataLines = lines.slice(2);
+            const results = [];
+            
+            dataLines.forEach(row => {
+                if (row.length <= Math.max(diamIndex, 3)) return; // S'assurer qu'on a assez de colonnes
+                
+                const calcul = parseInt(row[3]); // Colonne 4 (index 3)
+                const ref = row[diamIndex]?.trim();
+                
+                if (calcul === 1 && ref && ref !== "0" && ref !== "#N/A" && ref !== "") {
+                    results.push({
+                        cable: row[0] || "",
+                        categorie: row[1] || "",
+                        produit: row[2] || "",
+                        designation: row[6] || "",
+                        code: ref
+                    });
+                }
+            });
+            
+            return results;
+        }
+
+        function updateResults() {
+            const diameterInput = document.getElementById('diameter').value;
+            const cableType = document.querySelector('input[name="cableType"]:checked');
+            
+            if (!diameterInput || !cableType) {
+                document.getElementById('results').style.display = 'none';
+                return;
+            }
+
+            // Déterminer le type de câble à rechercher
+            let searchType = cableType.value;
+            if (searchType === 'ACCC' || searchType === 'HVCRC') {
+                searchType = 'HT maxi 200°C';
+            }
+
+            // Extraire les résultats correspondants
+            const results = extractMatchingColumn(csvDataRaw, diameterInput)
+                .filter(item => item.cable === searchType);
+
+            displayResults(results, searchType, diameterInput);
+        }
+
+        // Gestion des boutons radio
+        document.querySelectorAll('input[name="cableType"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Réinitialiser tous les styles
+                document.querySelectorAll('.radio-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                
+                // Ajouter le style sélectionné
+                this.closest('.radio-item').classList.add('selected');
+                
+                // Afficher/masquer le champ Ø core
+                const coreDiameter = document.getElementById('coreDiameter');
+                if (this.value === 'ACCC') {
+                    coreDiameter.classList.add('show');
+                } else {
+                    coreDiameter.classList.remove('show');
+                }
+                
+                // Mettre à jour les résultats
+                updateResults();
+            });
+        });
+
+        // Gestion du champ diamètre
+        document.getElementById('diameter').addEventListener('input', updateResults);
+        document.getElementById('coreSize').addEventListener('input', updateResults);
+
+        function displayResults(results, searchType, diameter) {
+            const resultsDiv = document.getElementById('results');
+            const resultsList = document.getElementById('resultsList');
+            
+            resultsDiv.style.display = 'block';
+            
+            if (results.length === 0) {
+                resultsList.innerHTML = '<div class="no-results">Aucun équipement trouvé pour les critères sélectionnés</div>';
+                return;
+            }
+            
+            // Grouper les résultats par catégorie
+            const groupedByCategory = {};
+            results.forEach(item => {
+                if (!groupedByCategory[item.categorie]) {
+                    groupedByCategory[item.categorie] = [];
+                }
+                groupedByCategory[item.categorie].push(item);
+            });
+            
+            let html = `
+                <div class="results-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Accessoire</th>
+                                <th>Désignation</th>
+                                <th>Référence</th>
+                                <th>Code AS400</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            let isFirstCategory = true;
+            Object.keys(groupedByCategory).forEach(category => {
+                // Ajouter le séparateur de catégorie
+                html += `
+                    <tr>
+                        <td colspan="4" class="category-separator ${isFirstCategory ? 'first-category' : ''}">${category}</td>
+                    </tr>
+                `;
+                isFirstCategory = false;
+                
+                // Ajouter les éléments de cette catégorie
+                groupedByCategory[category].forEach(item => {
+                    const displayCode = item.code === "#N/A" || item.code === "" ? "" : item.code;
+                    html += `
+                        <tr>
+                            <td class="accessoire-cell">${item.produit}</td>
+                            <td class="designation-cell">${item.designation}</td>
+                            <td class="reference-cell">${displayCode}</td>
+                            <td class="code-cell"></td>
+                        </tr>
+                    `;
+                });
+            });
+            
+            html += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            resultsList.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
