@@ -96,35 +96,33 @@
          *  3. Retourne chaque ligne où la colonne 4 (index 3) vaut 1, avec la valeur de la colonne trouvée
          */
         function searchCsv(diameterInput) {
-            if(!diameterInput) return [];
+            const csvDataRaw = `;;;;;;;7;8;9;10\nHT maxi 200°C;Stockbridge;StockBridge avec Armor Rod pour cable HT 200° maxi;1;1;;STOCKBRIDGE;VD7;VD8;VD9;VD10`;
 
-            const lines = csvDataRaw.split(/\r?\n/).filter(l=>l.trim().length);
-            const rows = lines.map(l=>l.split(';'));
+            if (!diameterInput) return [];
 
-            // Trouver la ligne des diamètres : première ligne avec ≥1 valeur numérique
-            const diamLineIdx = rows.findIndex(r => r.some(cell => /^\d+[,.]?\d*$/.test(cell.trim())));
-            if (diamLineIdx === -1) return [];
-            const diamRow = rows[diamLineIdx];
+            // Séparation des lignes puis des cellules
+            const rows = csvDataRaw.trim().split(/\r?\n/).map(l => l.split(';').map(c => c.trim()));
 
-            // Normaliser diamètre (virgule ou point) et comparer
-            const target = parseFloat(String(diameterInput).replace(',', '.'));
-            const colIdx = diamRow.findIndex(cell => parseFloat(cell.replace(',', '.')) === target);
+            // Première ligne = diamètres
+            const diamRow = rows[0];
+            const target  = parseFloat(String(diameterInput).replace(',', '.'));
+            const colIdx  = diamRow.findIndex(c => parseFloat(c.replace(',', '.')) === target);
             if (colIdx === -1) return [];
 
+            // Parcours des lignes suivantes
             const results = [];
-            for (let i = diamLineIdx + 1; i < rows.length; i++) {
-                const row = rows[i].map(c=>c.trim());
-                if (row[3] !== '1') continue; // colonne 4 = 1
-
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                if (row[3] !== '1') continue;                // colonne 4 = 1
                 const code = (row[colIdx] || '').trim();
                 if (!code || code === '0' || code === '#N/A') continue;
 
                 results.push({
-                    cable: row[0] || '',
-                    categorie: row[1] || '',
-                    produit: row[2] || '',
+                    cable      : row[0] || '',
+                    categorie  : row[1] || '',
+                    produit    : row[2] || '',
                     designation: row[6] || '',
-                    code: code
+                    code
                 });
             }
             return results;
