@@ -113,7 +113,7 @@
 
             const results = [];
             for (let i = diamLineIdx + 1; i < rows.length; i++) {
-                const row = rows[i];
+                const row = rows[i].map(c=>c.trim());
                 if (row[3] !== '1') continue; // colonne 4 = 1
 
                 const code = (row[colIdx] || '').trim();
