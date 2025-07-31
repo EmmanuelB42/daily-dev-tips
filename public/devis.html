@@ -87,7 +87,8 @@
 
     <script>
         // CSV brut – à remplacer par la vraie source si nécessaire
-        const csvDataRaw = `;;;;;;;7;8;9;10\nHT maxi 200°C;Stockbridge;StockBridge avec Armor Rod pour cable HT 200° maxi;1;1;;STOCKBRIDGE;VD7;VD8;VD9;VD10`;
+        const csvDataRaw = `;;;;;;;7;8;9;10
+HT maxi 200°C;Stockbridge;StockBridge avec Armor Rod pour cable HT 200° maxi;1;1;;STOCKBRIDGE;VD7;VD8;VD9;VD10`;
 
         /**
          * Recherche dans le CSV :
@@ -96,7 +97,8 @@
          *  3. Retourne chaque ligne où la colonne 4 (index 3) vaut 1, avec la valeur de la colonne trouvée
          */
         function searchCsv(diameterInput) {
-            const csvDataRaw = `;;;;;;;7;8;9;10\nHT maxi 200°C;Stockbridge;StockBridge avec Armor Rod pour cable HT 200° maxi;1;1;;STOCKBRIDGE;VD7;VD8;VD9;VD10`;
+            const csvDataRaw = `;;;;;;;7;8;9;10
+HT maxi 200°C;Stockbridge;StockBridge avec Armor Rod pour cable HT 200° maxi;1;1;;STOCKBRIDGE;VD7;VD8;VD9;VD10`;
 
             if (!diameterInput) return [];
 
